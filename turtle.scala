@@ -11,7 +11,6 @@ import doodle.turtle._
 import doodle.turtle.Instruction._
 
 object turtle extends App {
-
   //exercise 1
   def polygon(sides: Int, sideLength: Double): Image = {
     val rotation = Angle.degrees(360) / sides
@@ -79,9 +78,36 @@ object turtle extends App {
 
   //exercise 8
   def iterate(steps: Int, seed: List[Instruction], rule: Instruction => List[Instruction]): List[Instruction] = {
-    //TODO
+    steps match {
+      case 0 => seed
+      case step => iterate(step - 1, rewrite(seed, rule), rule)
+    }
   }
 
   //exercise 9
+  def polygonFlat(sides: Int, sideLength: Double): Image = {
+    val rotation = Angle.degrees(360) / sides
 
+    val elts = (1 to sides).toList.flatMap { side =>
+      List(turn(rotation), forward(sideLength))
+    }
+
+    Turtle.draw(elts)
+  }
+
+  val polyFlat = polygonFlat(10, 10)
+  polyFlat.draw
+
+  def squareSpiralFlat(steps: Int, distance: Double, angle: Angle, increment: Double): Image = {
+    val rotation = angle
+
+    val elts = (1 to steps).toList.flatMap { step =>
+      List(forward(distance + (increment * step)), turn(angle))
+    }
+
+    Turtle.draw(elts)
+  }
+
+  val sSpiralFlat = squareSpiralFlat(100, 5, Angle.degrees(89), 1)
+  sSpiralFlat.draw
 }
